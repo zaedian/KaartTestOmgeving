@@ -91,12 +91,14 @@
                     const marker = L.marker(latlng).addTo(map);
                     markers.push(marker); // Add the marker to our array
 
-                    marker.bindPopup(`
-                        <strong>${winkel.naam}</strong><br>
-                        ${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
-                        ${winkel.producten}<br>
-                        <a href="${winkel.url}" target="_blank">Bekijk deze winkel</a>
-                    `);
+					marker.bindPopup(`
+						<strong>${winkel.naam}</strong><br>
+						${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
+						${winkel.producten}<br>
+						<a href="${winkel.url}" target="_blank">Bekijk deze winkel</a><br>
+						<a href="https://www.google.com/maps/place/${winkel.latitude},${winkel.longitude}" target="_blank">Plan je route</a>
+					`);
+
 
                     marker.on('popupopen', () => {
                         map.flyTo(latlng, 15, { duration: 3 });
