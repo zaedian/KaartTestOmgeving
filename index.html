@@ -91,7 +91,8 @@
                         ${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
                         ${winkel.producten}<br>
                         <a href="${winkel.url}" target="_blank">> Bekijk deze winkel</a><br>
-                        <a href="https://www.google.com/maps/place/$${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
+						<!-- <a href="https://www.google.com/maps/place/$${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>-->
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
                     `);
 
                     marker.on('popupopen', () => {
@@ -134,7 +135,10 @@
         }
 
         // AUTOCOMPLETE FUNCTIONS
-
+		
+		//Not working yet.
+		//searchInput.addEventListener('input', generateSuggestions);
+		
         function generateSuggestions() {
             const query = searchInput.value.toLowerCase().trim();
             autocompleteSuggestions.innerHTML = '';
