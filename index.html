@@ -246,26 +246,25 @@
             }
         });
 
-        // Here’s the fix for toggling the checkbox by clicking the entire li **and** applying filters on checkbox change:
+		document.querySelectorAll('#categoryList li').forEach(li => {
+			li.addEventListener('click', (event) => {
+				// If the click was on the checkbox or label or inside it, ignore here
+				if (event.target.tagName.toLowerCase() === 'input' || event.target.tagName.toLowerCase() === 'label') return;
 
-        // 1) Add click listener on each <li> that toggles the checkbox inside it
-        document.querySelectorAll('#categoryList li').forEach(li => {
-            li.addEventListener('click', (event) => {
-                // Prevent toggling twice if the click is directly on the checkbox itself
-                if (event.target.tagName.toLowerCase() === 'input') return;
+				// Toggle the checkbox inside this li
+				const checkbox = li.querySelector('input[type="checkbox"]');
+				checkbox.checked = !checkbox.checked;
 
-                const checkbox = li.querySelector('input[type="checkbox"]');
-                checkbox.checked = !checkbox.checked;
+				// Trigger filter update
+				applyFilters();
+			});
+		});
 
-                // Apply filters right after toggle
-                applyFilters();
-            });
-        });
+		// Also listen for direct checkbox change to apply filters
+		document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
+			checkbox.addEventListener('change', applyFilters);
+		});
 
-        // 2) Also listen to checkbox changes directly (handles keyboard toggling, etc.)
-        document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', applyFilters);
-        });
 
         clearFiltersButton.addEventListener('click', () => {
             searchInput.value = '';
