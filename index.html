@@ -30,16 +30,16 @@
                 <div class="categories-section">
                     <h3>Categorieën</h3>
                     <ul id="categoryList">
-					  <li><label><input type="checkbox" value="groente"> Groente</label></li>
-					  <li><label><input type="checkbox" value="fruit"> Fruit</label></li>
-					  <li><label><input type="checkbox" value="vlees"> Vlees</label></li>
-					  <li><label><input type="checkbox" value="zuivel"> Zuivel</label></li>
-					  <li><label><input type="checkbox" value="eieren"> Eieren</label></li>
-					  <li><label><input type="checkbox" value="bloemen"> Bloemen</label></li>
-					  <li><label><input type="checkbox" value="brood"> Brood</label></li>
-					  <li><label><input type="checkbox" value="kaas"> Kaas</label></li>
-					  <li><label><input type="checkbox" value="zelfpluk"> Zelfpluk / Pluktuin</label></li>
-					  <li><label><input type="checkbox" value="pakketten"> Groentepakketten</label></li>
+					  <li><label><input type="checkbox" value="vlees"> Vlees verkoop</label></li>
+					  <li><label><input type="checkbox" value="zuivel"> Zuivel verkoop</label></li>
+					  <li><label><input type="checkbox" value="eieren"> Eieren verkoop</label></li>
+					  <li><label><input type="checkbox" value="groente"> Groente verkoop</label></li>
+					  <li><label><input type="checkbox" value="fruit"> Fruit verkoop</label></li>
+					  <li><label><input type="checkbox" value="kaas"> Kaas verkoop</label></li>
+					  <li><label><input type="checkbox" value="brood"> Brood verkoop</label></li>
+					  <li><label><input type="checkbox" value="bloemen"> Bloemen verkoop</label></li>
+					  <li><label><input type="checkbox" value="zelfpluk"> Zelfpluk / Pluktuin verkoop</label></li>
+					  <li><label><input type="checkbox" value="pakketten"> Groentepakketten verkoop</label></li>
                         </ul>
                 </div>
 
@@ -291,8 +291,8 @@
             applyFilters(); // Re-apply filters to show all shops
         });
 
-        // Initial data fetch
-        fetch('scripts/get-shops.php')
+        // Initial data fetch for sql database
+        /*fetch('scripts/get-shops.php')
             .then(response => response.json())
             .then(data => {
                 allShops = data; // Store all fetched shops
@@ -300,7 +300,21 @@
             })
             .catch(error => {
                 console.error('Fout bij het laden van winkeldatabase:', error);
-            });
+            });*/
+			
+			
+		// Initial data fetch from local winkels.json
+		fetch('winkels.json')
+			.then(response => response.json())
+			.then(data => {
+				allShops = data; // Store all fetched shops
+				displayShops(allShops); // Display all shops initially
+			})
+			.catch(error => {
+				console.error('Fout bij het laden van winkels.json:', error);
+		});
+	
+			
     </script>
 </body>
 </html>

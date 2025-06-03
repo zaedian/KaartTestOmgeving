@@ -1,0 +1,302 @@
+[
+  {
+    "naam": "De Middelwaard",
+    "producten": "Oesterzwammen bio",
+    "adres": "Middelwaard 2",
+    "postcode": "6924SE",
+    "locatie": "Loo",
+    "url": "https://demiddelwaard.nl/",
+    "latitude": 51.93567,
+    "longitude": 6.00312
+  },
+  {
+    "naam": "De Ommuurde Tuin",
+    "producten": "Groente, groentepakketten, theetuin, vrijwilligers",
+    "adres": "Kortenburg 16",
+    "postcode": "6871ND",
+    "locatie": "Renkum",
+    "url": "https://www.ommuurdetuin.nl/over",
+    "latitude": 51.9978,
+    "longitude": 5.7454
+  },
+  {
+    "naam": "Historische Tuinderij De Warmoes",
+    "producten": "Groente, fruit, bloemen, noten, café",
+    "adres": "Griftdijk Noord 11",
+    "postcode": "6663AA",
+    "locatie": "Lent",
+    "url": "https://www.dewarmoes.nl/",
+    "latitude": 51.867035,
+    "longitude": 5.855986
+  },
+  {
+    "naam": "Spijkerzwam",
+    "producten": "Oesterzwammen",
+    "adres": "Spijkerstraat 125",
+    "postcode": "6828DC",
+    "locatie": "Arnhem",
+    "url": "https://www.spijkerzwam.nl/",
+    "latitude": 51.985,
+    "longitude": 5.923
+  },
+  {
+    "naam": "Landgoed de Brouwketel",
+    "producten": "Zelfpluktuin met abonnement",
+    "adres": "Brouwketel 1",
+    "postcode": "6851ZX",
+    "locatie": "Huissen",
+    "url": "https://landgoeddebrouwketel.nl/",
+    "latitude": 51.9398,
+    "longitude": 5.961
+  },
+  {
+    "naam": "Pompoenparadijs",
+    "producten": "Pompoenen",
+    "adres": "Mooieweg 17",
+    "postcode": "6836AC",
+    "locatie": "Arnhem",
+    "url": "https://pompoenparadijs.nl/",
+    "latitude": 51.9624,
+    "longitude": 5.9338
+  },
+  {
+    "naam": "De Horsterhof",
+    "producten": "Groente, zuivel, brood, groentepakketten, bio ook zelfpluk",
+    "adres": "Horsterstraat 1",
+    "postcode": "6921AM",
+    "locatie": "Duiven",
+    "url": "https://horsterhof.nl/",
+    "latitude": 51.949,
+    "longitude": 6.013
+  },
+  {
+    "naam": "Boerderij Veld en Beek",
+    "producten": "Zuivel, groente",
+    "adres": "Fonteinallee 33",
+    "postcode": "6865ND",
+    "locatie": "Doorwerth",
+    "url": "https://www.veldenbeek.nl/",
+    "latitude": 51.97,
+    "longitude": 5.8
+  },
+  {
+    "naam": "Zorgboerderij Tokhok",
+    "producten": "Zuivel, groente, eieren, vlees",
+    "adres": "Beukenlaan 27",
+    "postcode": "6823MA",
+    "locatie": "Arnhem",
+    "url": "https://www.zorgboerderijtokhok.nl/",
+    "latitude": 51.98,
+    "longitude": 5.91
+  },
+  {
+    "naam": "Burgerboerderij de Patrijs",
+    "producten": "Zuivel, groente, eieren",
+    "adres": "Dochterenseweg 13A",
+    "postcode": "7245NN",
+    "locatie": "Laren",
+    "url": "https://depatrijs.eco/",
+    "latitude": 52.2,
+    "longitude": 6.4
+  },
+  {
+    "naam": "Mimint Biomarkt",
+    "producten": "Groente, brood, vlees, granen",
+    "adres": "Turfmarkt 15",
+    "postcode": "6811HK",
+    "locatie": "Arnhem",
+    "url": "https://www.mimint.nl/",
+    "latitude": 51.985,
+    "longitude": 5.91
+  },
+  {
+    "naam": "Van Nature",
+    "producten": "Groente, zuivel, brood, vlees, kaas, granen",
+    "adres": "Gerard Noodtstraat 135",
+    "postcode": "6511ST",
+    "locatie": "Nijmegen",
+    "url": "https://vannature-nijmegen.nl/",
+    "latitude": 51.845,
+    "longitude": 5.86
+  },
+  {
+    "naam": "Biologische Tuinderij de Stroom",
+    "producten": "Eigen groente, groente/fruitpakketten, brood, kaas",
+    "adres": "Hemmensestraat 17",
+    "postcode": "6668LB",
+    "locatie": "Randwijk",
+    "url": "https://www.tuinderijdestroom.nl/",
+    "latitude": 51.95,
+    "longitude": 5.73
+  },
+  {
+    "naam": "Tuinderij Gordons Spoor",
+    "producten": "Groentepakketten",
+    "adres": "Groesbeek",
+    "postcode": null,
+    "locatie": "Groesbeek",
+    "url": "https://gordonsspoor.nl/",
+    "latitude": 51.78,
+    "longitude": 5.93
+  },
+  {
+    "naam": "Landgoed Huis Sevenaer",
+    "producten": "Groente, fruit, vlees",
+    "adres": "Wittenburgstraat 11",
+    "postcode": "6901AN",
+    "locatie": "Zevenaar",
+    "url": "https://www.huissevenaer.nl/",
+    "latitude": 51.93,
+    "longitude": 6.07
+  },
+  {
+    "naam": "Vlier",
+    "producten": "Biologische groente, fruit, vrijwilligers",
+    "adres": "Wolfheze 27B",
+    "postcode": "6874BG",
+    "locatie": "Wolfheze",
+    "url": "https://www.vlier.nu/",
+    "latitude": 52.005,
+    "longitude": 5.791667
+  },
+  {
+    "naam": "Hof Bredelaar",
+    "producten": "Zelfoogst",
+    "adres": "Breedlersestraat 7a",
+    "postcode": "6667NP",
+    "locatie": "Elst",
+    "url": "https://hofbredelaar.com/",
+    "latitude": 51.92,
+    "longitude": 5.87
+  },
+  {
+    "naam": "Landwinkel Smits",
+    "producten": "Groente, vlees",
+    "adres": "Lage Heurnseweg 35",
+    "postcode": "7095AL",
+    "locatie": "De Heurne",
+    "url": "https://www.groentekwekerij-smits.nl/winkel/hoofdpagina",
+    "latitude": 51.92,
+    "longitude": 6.39
+  },
+  {
+    "naam": "’t Düvelshöfke",
+    "producten": "Vlees, pluktuin fruit en bloemen",
+    "adres": "Duivelsdijk 21",
+    "postcode": "7574PB",
+    "locatie": "Oldenzaal",
+    "url": "https://duvelshofke.nl/",
+    "latitude": 52.32,
+    "longitude": 6.93
+  },
+  {
+    "naam": "De Huppe",
+    "producten": "Zuivel, groente, eieren, honing, bloemen pluktuin",
+    "adres": "Kleine Veerweg 9",
+    "postcode": "8017BP",
+    "locatie": "Zwolle",
+    "url": "https://dehuppe.nl/",
+    "latitude": 52.5,
+    "longitude": 6.1
+  },
+  {
+    "naam": "Den4akker",
+    "producten": "Eieren, asperges, klein fruit",
+    "adres": "Kapelweg 14",
+    "postcode": "7233SC",
+    "locatie": "Vierakker",
+    "url": "https://www.den4akker.nl/",
+    "latitude": 52.05,
+    "longitude": 6.3
+  },
+  {
+    "naam": "De Stokhoven",
+    "producten": "Asperges",
+    "adres": "Rijksweg 37",
+    "postcode": "6996AB",
+    "locatie": "Drempt",
+    "url": "https://www.destokhoven.nl/",
+    "latitude": 52.05,
+    "longitude": 6.2
+  },
+  {
+    "naam": "Familie Te Loeke",
+    "producten": "Aardappelen, uien",
+    "adres": "Avesterweg 38",
+    "postcode": "7156LE",
+    "locatie": "Beltrum",
+    "url": null,
+    "latitude": 52.03,
+    "longitude": 6.55
+  },
+  {
+    "naam": "Boerderij Korenblik",
+    "producten": "Groente, vlees, zuivel, fruit, algemeen alles bio",
+    "adres": "Geesinkweg 13",
+    "postcode": "7231RE",
+    "locatie": "Warnsveld",
+    "url": "http://boerderijkorenblik.nl",
+    "latitude": 52.14,
+    "longitude": 6.2
+  },
+  {
+    "naam": "De Vijfsprong",
+    "producten": "Groente, vlees, zuivel bio",
+    "adres": "Reeoordweg 2",
+    "postcode": "7251JJ",
+    "locatie": "Vorden",
+    "url": "https://devijfsprong.nl/",
+    "latitude": 52.1,
+    "longitude": 6.32
+  },
+  {
+    "naam": "Boerderij Ruimzicht",
+    "producten": "Groente, vlees, zuivel bio",
+    "adres": "Bielemansdijk 11a",
+    "postcode": "7025CN",
+    "locatie": "Halle",
+    "url": "https://boerderijruimzicht.nl",
+    "latitude": 52.0,
+    "longitude": 6.47
+  },
+  {
+    "naam": "De Kruisbrink",
+    "producten": "Groente, zuivel, vlees",
+    "adres": "Kruisbrinkseweg 7",
+    "postcode": "7227DA",
+    "locatie": "Toldijk",
+    "url": "https://dekruisbrink.nl",
+    "latitude": 52.05,
+    "longitude": 6.25
+  },
+  {
+    "naam": "Hoge Born",
+    "producten": "Groente, fruit, eieren, zuivel, vlees",
+    "adres": "Bornesteeg 87",
+    "postcode": "6708PD",
+    "locatie": "Wageningen",
+    "url": "https://www.dehogeborn.nl",
+    "latitude": 51.97,
+    "longitude": 5.67
+  },
+  {
+    "naam": "Natuurlijk Henriette",
+    "producten": "Groente, fruit, eieren, brood",
+    "adres": "Klein Dongenseweg 81",
+    "postcode": "5106AB",
+    "locatie": "Dongen",
+    "url": "https://www.natuurlijkkleindongen.nl/",
+    "latitude": 51.63,
+    "longitude": 4.94
+  },
+  {
+    "naam": "Bonna Terra",
+    "producten": "Groente, fruit",
+    "adres": "Broekstraat 22a",
+    "postcode": "5688JX",
+    "locatie": "Spoordonk",
+    "url": null,
+    "latitude": 51.5,
+    "longitude": 5.3
+  }
+]
