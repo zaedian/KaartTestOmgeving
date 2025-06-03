@@ -156,6 +156,7 @@ html, body {
     padding: 5px 8px;
     border-radius: 4px;
     transition: background-color 0.2s ease;
+	//text-decoration: underline;
 }
 
 #clearFilters:hover {

@@ -57,7 +57,7 @@
     <script src="scripts/leaflet.js"></script>
     <script>
         // Your existing JavaScript code
-        const map = L.map('map', { attributionControl: false }).setView([51.9851, 5.8987], 10);
+        const map = L.map('map', { attributionControl: false }).setView([51.9851, 5.8987], 9);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
            // attribution: '&copy; OpenStreetMap contributors'
@@ -138,7 +138,7 @@
             displayShops(filteredShops);
         }
 
-        // --- NEW AUTOCOMPLETE FUNCTIONS ---
+        // --- AUTOCOMPLETE FUNCTIONS ---
 
         // Function to generate and display suggestions
         function generateSuggestions() {
