@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kaart testomgeving</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/leaflet.css"/>
+	<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+	
+    <div id="map-container">
+        <div id="sidebar" class="open">
+            <div class="sidebar-dark-area">
+			<h2>Zoek jouw locatie</h2>
+			<p>Een winkel vinden bij jou in de buurt?<br>Neem gerust een kijkje!</p>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Zoek op plaats of postcode" autocomplete="off">
+                    <button id="searchButton"><img src="images/search-icon.svg" alt="Search"></button> 
+                    <div id="autocomplete-suggestions"></div> </div>
+            </div>
+
+            <div class="sidebar-light-area">
+                <div class="filter-controls">
+                    <h3>Filter</h3>
+                    <button id="clearFilters">Wis alle filters</button>
+                </div>
+
+                <div class="categories-section">
+                    <h3>Categorieën</h3>
+                    <ul id="categoryList">
+					  <li><label><input type="checkbox" value="groente"> Groente</label></li>
+					  <li><label><input type="checkbox" value="fruit"> Fruit</label></li>
+					  <li><label><input type="checkbox" value="vlees"> Vlees</label></li>
+					  <li><label><input type="checkbox" value="zuivel"> Zuivel</label></li>
+					  <li><label><input type="checkbox" value="eieren"> Eieren</label></li>
+					  <li><label><input type="checkbox" value="bloemen"> Bloemen</label></li>
+					  <li><label><input type="checkbox" value="brood"> Brood</label></li>
+					  <li><label><input type="checkbox" value="kaas"> Kaas</label></li>
+					  <li><label><input type="checkbox" value="zelfpluk"> Zelfpluk / Pluktuin</label></li>
+					  <li><label><input type="checkbox" value="pakketten"> Groentepakketten</label></li>
+                        </ul>
+                </div>
+
+                <hr class="separator">
+
+                <h2>Winkels</h2>
+                <ul id="storeList">
+                    </ul>
+            </div>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="scripts/leaflet.js"></script>
+    <script>
+        // Your existing JavaScript code
+        const map = L.map('map', { attributionControl: false }).setView([51.9851, 5.8987], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+           // attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const storeList = document.getElementById('storeList');
+        const sidebar = document.getElementById('sidebar');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const clearFiltersButton = document.getElementById('clearFilters');
+        const categoryList = document.getElementById('categoryList');
+        const autocompleteSuggestions = document.getElementById('autocomplete-suggestions'); // NEW ELEMENT
+
+        let allShops = []; // This will store all shops fetched from the server
+        let markers = []; // This will store all Leaflet markers to easily clear them
+
+        // Function to clear all existing markers from the map
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = []; // Reset the markers array
+        }
+
+        // Function to display shops on the map and in the list
+        function displayShops(shopsToDisplay) {
+            clearMarkers(); // Clear existing markers before adding new ones
+            storeList.innerHTML = ''; // Clear existing list items
+
+            shopsToDisplay.forEach(winkel => {
+                if (winkel.latitude && winkel.longitude) {
+                    const latlng = [winkel.latitude, winkel.longitude];
+                    const marker = L.marker(latlng).addTo(map);
+                    markers.push(marker); // Add the marker to our array
+
+                    marker.bindPopup(`
+                        <strong>${winkel.naam}</strong><br>
+                        ${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
+                        ${winkel.producten}<br>
+                        <a href="${winkel.url}" target="_blank">Bezoek website</a>
+                    `);
+
+                    marker.on('popupopen', () => {
+                        map.flyTo(latlng, 15, { duration: 3 });
+                    });
+
+                    // Create list item for this store
+                    const li = document.createElement('li');
+                    li.textContent = winkel.naam;
+                    li.title = winkel.adres;
+
+                    li.addEventListener('click', () => {
+                        map.flyTo(latlng, 15, { duration: 3 });
+                        marker.openPopup();
+                    });
+
+                    storeList.appendChild(li);
+                }
+            });
+        }
+
+        // Function to apply filters based on search input and categories
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
+                                            .map(checkbox => checkbox.value.toLowerCase());
+
+            let filteredShops = allShops.filter(winkel => {
+                const matchesSearch = searchTerm === '' || 
+                                      winkel.naam.toLowerCase().includes(searchTerm) ||
+                                      winkel.adres.toLowerCase().includes(searchTerm) ||
+                                      winkel.locatie.toLowerCase().includes(searchTerm) ||
+                                      winkel.postcode.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = selectedCategories.length === 0 || 
+                                        selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
+                return matchesSearch && matchesCategory;
+            });
+
+            displayShops(filteredShops);
+        }
+
+        // --- NEW AUTOCOMPLETE FUNCTIONS ---
+
+        // Function to generate and display suggestions
+        function generateSuggestions() {
+            const query = searchInput.value.toLowerCase().trim();
+            autocompleteSuggestions.innerHTML = ''; // Clear previous suggestions
+            autocompleteSuggestions.style.display = 'none'; // Hide by default
+
+            if (query.length < 2) { // Only show suggestions if at least 2 characters are typed
+                return;
+            }
+
+            const uniqueSuggestions = new Map(); // Using a Map to store unique suggestions with their first associated latlng
+
+            allShops.forEach(winkel => {
+                // Prioritize 'locatie', then 'postcode', then 'adres' for suggestions
+                const searchableFields = [
+                    winkel.locatie, 
+                    winkel.postcode, 
+                    winkel.adres,
+                    winkel.naam
+                ];
+
+                for (const field of searchableFields) {
+                    if (field && field.toLowerCase().includes(query)) {
+                        let suggestionText = field;
+                        let latlng = [winkel.latitude, winkel.longitude];
+
+                        // Optionally refine suggestion text (e.g., "Nijmegen" from "Nijmegen-Centrum")
+                        // If you want broader city suggestions like "Nijmegen" even if a shop is in "Nijmegen-Oost",
+                        // you'd need to extract just the city part from 'locatie' or have a separate city list.
+                        // For now, it will suggest the full field content.
+
+                        if (!uniqueSuggestions.has(suggestionText)) {
+                            uniqueSuggestions.set(suggestionText, latlng); // Store the first found latlng for this text
+                        }
+                    }
+                }
+            });
+
+            if (uniqueSuggestions.size > 0) {
+                uniqueSuggestions.forEach((latlng, suggestionText) => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('autocomplete-item');
+                    suggestionItem.innerHTML = `<span class="location-icon"></span> ${suggestionText}`; // Add an icon placeholder
+                    suggestionItem.dataset.lat = latlng[0];
+                    suggestionItem.dataset.lng = latlng[1];
+                    suggestionItem.dataset.suggestionText = suggestionText; // Store full text for input
+
+                    suggestionItem.addEventListener('click', (event) => {
+                        const targetItem = event.currentTarget;
+                        const lat = parseFloat(targetItem.dataset.lat);
+                        const lng = parseFloat(targetItem.dataset.lng);
+                        const text = targetItem.dataset.suggestionText;
+
+                        searchInput.value = text; // Fill search input with selected text
+                        map.flyTo([lat, lng], 14, { duration: 1.5 }); // Fly to the location (adjust zoom)
+                        
+                        autocompleteSuggestions.style.display = 'none'; // Hide suggestions
+                        applyFilters(); // Apply filters based on the new search input value
+                    });
+                    autocompleteSuggestions.appendChild(suggestionItem);
+                });
+                autocompleteSuggestions.style.display = 'block'; // Show the suggestions div
+            } else {
+                autocompleteSuggestions.style.display = 'none';
+            }
+        }
+
+        // Hide suggestions when clicking outside the search input and suggestions
+        document.addEventListener('click', (event) => {
+            if (!searchInput.contains(event.target) && !autocompleteSuggestions.contains(event.target)) {
+                autocompleteSuggestions.style.display = 'none';
+            }
+        });
+		
+		
+		/*Start geo search*/
+		
+		async function geocodeSearch(query) {
+		if (!query) return;
+
+		const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+
+		try {
+			const response = await fetch(url);
+			const data = await response.json();
+
+			if (data && data.length > 0) {
+				const place = data[0];
+				const lat = parseFloat(place.lat);
+				const lon = parseFloat(place.lon);
+
+				// Fly the map to the location
+				map.flyTo([lat, lon], 14, { duration: 1.5 });
+
+				// OPTIONAL: Show a temporary marker for searched location
+				const tempMarker = L.marker([lat, lon]).addTo(map);
+				tempMarker.bindPopup(`<strong>${place.display_name}</strong>`).openPopup();
+
+				setTimeout(() => {
+					map.removeLayer(tempMarker);
+				}, 5000);
+
+				autocompleteSuggestions.style.display = 'none';
+				applyFilters(); // keep showing filtered shops
+			} else {
+				alert('Locatie niet gevonden, probeer het opnieuw.');
+			}
+		} catch (error) {
+			console.error('Geocode fout:', error);
+		}
+	}
+
+
+	/*End geo search*/
+
+
+        // Event Listeners for filtering
+        //searchButton.addEventListener('click', applyFilters);
+		searchButton.addEventListener('click', () => {
+			const query = searchInput.value.trim();
+			if (query.length === 0) {
+				applyFilters(); // No input, just apply filters
+			} else {
+				geocodeSearch(query);
+			}
+		});
+        
+        // Listen for input changes to generate suggestions
+        searchInput.addEventListener('input', generateSuggestions); // Call function as user types
+		searchInput.addEventListener('keyup', (event) => { 
+			if (event.key === 'Enter') {
+				const query = searchInput.value.trim();
+				if (query.length === 0) {
+					applyFilters();
+				} else {
+					geocodeSearch(query);
+				}
+			}
+		});
+
+        categoryList.addEventListener('change', applyFilters); // When a checkbox is changed
+
+        clearFiltersButton.addEventListener('click', () => {
+            searchInput.value = ''; // Clear search input
+            document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false; // Uncheck all category checkboxes
+            });
+            autocompleteSuggestions.style.display = 'none'; // Hide suggestions
+            applyFilters(); // Re-apply filters to show all shops
+        });
+
+        // Initial data fetch
+        fetch('scripts/get-shops.php')
+            .then(response => response.json())
+            .then(data => {
+                allShops = data; // Store all fetched shops
+                displayShops(allShops); // Display all shops initially
+            })
+            .catch(error => {
+                console.error('Fout bij het laden van winkeldatabase:', error);
+            });
+    </script>
+</body>
+</html>
