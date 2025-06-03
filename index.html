@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/leaflet.css"/>
-	<link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
-	
+    
     <div id="map-container">
         <div id="sidebar" class="open">
             <div class="sidebar-dark-area">
-			<h2>Zoek jouw locatie</h2>
-			<p>Een winkel vinden bij jou in de buurt?<br>Neem gerust een kijkje!</p>
+            <h2>Zoek jouw locatie</h2>
+            <p>Een winkel vinden bij jou in de buurt?<br>Neem gerust een kijkje!</p>
 
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Zoek op plaats of postcode" autocomplete="off">
@@ -30,24 +30,24 @@
                 <div class="categories-section">
                     <h3>Categorieën</h3>
                     <ul id="categoryList">
-					  <li><label><input type="checkbox" value="vlees"> Vlees verkoop</label></li>
-					  <li><label><input type="checkbox" value="zuivel"> Zuivel verkoop</label></li>
-					  <li><label><input type="checkbox" value="eieren"> Eieren verkoop</label></li>
-					  <li><label><input type="checkbox" value="groente"> Groente verkoop</label></li>
-					  <li><label><input type="checkbox" value="fruit"> Fruit verkoop</label></li>
-					  <li><label><input type="checkbox" value="kaas"> Kaas verkoop</label></li>
-					  <li><label><input type="checkbox" value="brood"> Brood verkoop</label></li>
-					  <li><label><input type="checkbox" value="bloemen"> Bloemen verkoop</label></li>
-					  <li><label><input type="checkbox" value="zelfpluk"> Zelfpluk / Pluktuin verkoop</label></li>
-					  <li><label><input type="checkbox" value="pakketten"> Groentepakketten verkoop</label></li>
-                        </ul>
+                        <li><label><input type="checkbox" value="vlees"> Vlees verkoop</label></li>
+                        <li><label><input type="checkbox" value="zuivel"> Zuivel verkoop</label></li>
+                        <li><label><input type="checkbox" value="eieren"> Eieren verkoop</label></li>
+                        <li><label><input type="checkbox" value="groente"> Groente verkoop</label></li>
+                        <li><label><input type="checkbox" value="fruit"> Fruit verkoop</label></li>
+                        <li><label><input type="checkbox" value="kaas"> Kaas verkoop</label></li>
+                        <li><label><input type="checkbox" value="brood"> Brood verkoop</label></li>
+                        <li><label><input type="checkbox" value="bloemen"> Bloemen verkoop</label></li>
+                        <li><label><input type="checkbox" value="zelfpluk"> Zelfpluk / Pluktuin verkoop</label></li>
+                        <li><label><input type="checkbox" value="pakketten"> Groentepakketten verkoop</label></li>
+                    </ul>
                 </div>
 
                 <hr class="separator">
 
                 <h2>Winkels</h2>
                 <ul id="storeList">
-                    </ul>
+                </ul>
             </div>
         </div>
 
@@ -60,7 +60,7 @@
         const map = L.map('map', { attributionControl: false }).setView([51.9851, 5.8987], 9);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-           // attribution: '&copy; OpenStreetMap contributors'
+           // attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         const storeList = document.getElementById('storeList');
@@ -91,13 +91,13 @@
                     const marker = L.marker(latlng).addTo(map);
                     markers.push(marker); // Add the marker to our array
 
-					marker.bindPopup(`
-						<strong>${winkel.naam}</strong><br>
-						${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
-						${winkel.producten}<br>
-						<a href="${winkel.url}" target="_blank">> Bekijk deze winkel</a><br>
-						<a href="https://www.google.com/maps/place/${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
-					`);
+                    marker.bindPopup(`
+                        <strong>${winkel.naam}</strong><br>
+                        ${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
+                        ${winkel.producten}<br>
+                        <a href="${winkel.url}" target="_blank">> Bekijk deze winkel</a><br>
+                        <a href="https://www.google.com/maps/place/$${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
+                    `);
 
 
                     marker.on('popupopen', () => {
@@ -123,17 +123,17 @@
         function applyFilters() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
-                                            .map(checkbox => checkbox.value.toLowerCase());
+                                                        .map(checkbox => checkbox.value.toLowerCase());
 
             let filteredShops = allShops.filter(winkel => {
                 const matchesSearch = searchTerm === '' || 
-                                      winkel.naam.toLowerCase().includes(searchTerm) ||
-                                      winkel.adres.toLowerCase().includes(searchTerm) ||
-                                      winkel.locatie.toLowerCase().includes(searchTerm) ||
-                                      winkel.postcode.toLowerCase().includes(searchTerm);
-                
+                                            winkel.naam.toLowerCase().includes(searchTerm) ||
+                                            winkel.adres.toLowerCase().includes(searchTerm) ||
+                                            winkel.locatie.toLowerCase().includes(searchTerm) ||
+                                            winkel.postcode.toLowerCase().includes(searchTerm);
+                                
                 const matchesCategory = selectedCategories.length === 0 || 
-                                        selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
+                                            selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
                 return matchesSearch && matchesCategory;
             });
 
@@ -215,115 +215,119 @@
                 autocompleteSuggestions.style.display = 'none';
             }
         });
-		
-		
-		/*Start geo search*/
-		
-		async function geocodeSearch(query) {
-		if (!query) return;
+        
+        
+        /*Start geo search*/
+        
+        async function geocodeSearch(query) {
+        if (!query) return;
 
-		const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
 
-		try {
-			const response = await fetch(url);
-			const data = await response.json();
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-			if (data && data.length > 0) {
-				const place = data[0];
-				const lat = parseFloat(place.lat);
-				const lon = parseFloat(place.lon);
+            if (data && data.length > 0) {
+                const place = data[0];
+                const lat = parseFloat(place.lat);
+                const lon = parseFloat(place.lon);
 
-				// Fly the map to the location
-				map.flyTo([lat, lon], 14, { duration: 1.5 });
+                // Fly the map to the location
+                map.flyTo([lat, lon], 14, { duration: 1.5 });
 
-				// OPTIONAL: Show a temporary marker for searched location
-				const tempMarker = L.marker([lat, lon]).addTo(map);
-				tempMarker.bindPopup(`<strong>${place.display_name}</strong>`).openPopup();
+                // OPTIONAL: Show a temporary marker for searched location
+                const tempMarker = L.marker([lat, lon]).addTo(map);
+                tempMarker.bindPopup(`<strong>${place.display_name}</strong>`).openPopup();
 
-				setTimeout(() => {
-					map.removeLayer(tempMarker);
-				}, 5000);
+                setTimeout(() => {
+                    map.removeLayer(tempMarker);
+                }, 5000);
 
-				autocompleteSuggestions.style.display = 'none';
-				applyFilters(); // keep showing filtered shops
-			} else {
-				alert('Locatie niet gevonden, probeer het opnieuw.');
-			}
-		} catch (error) {
-			console.error('Geocode fout:', error);
-		}
-	}
+                autocompleteSuggestions.style.display = 'none';
+                applyFilters(); // keep showing filtered shops
+            } else {
+                alert('Locatie niet gevonden, probeer het opnieuw.');
+            }
+        } catch (error) {
+            console.error('Geocode fout:', error);
+        }
+    }
 
 
-	/*End geo search*/
+    /*End geo search*/
 
 
         // Event Listeners for filtering
         //searchButton.addEventListener('click', applyFilters);
-		searchButton.addEventListener('click', () => {
-			const query = searchInput.value.trim();
-			if (query.length === 0) {
-				applyFilters(); // No input, just apply filters
-			} else {
-				geocodeSearch(query);
-			}
-		});
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query.length === 0) {
+                applyFilters(); // No input, just apply filters
+            } else {
+                geocodeSearch(query);
+            }
+        });
         
         // Listen for input changes to generate suggestions
         searchInput.addEventListener('input', generateSuggestions); // Call function as user types
-		searchInput.addEventListener('keyup', (event) => { 
-			if (event.key === 'Enter') {
-				const query = searchInput.value.trim();
-				if (query.length === 0) {
-					applyFilters();
-				} else {
-					geocodeSearch(query);
-				}
-			}
-		});
+        searchInput.addEventListener('keyup', (event) => { 
+            if (event.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query.length === 0) {
+                    applyFilters();
+                } else {
+                    geocodeSearch(query);
+                }
+            }
+        });
 
-        categoryList.addEventListener('change', applyFilters); // When a checkbox is changed
+        // FIX: Remove the old change listener from categoryList
+        categoryList.removeEventListener('change', applyFilters); 
 
-		clearFiltersButton.addEventListener('click', () => {
-			searchInput.value = ''; // Clear search input
-			document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
-				checkbox.checked = false; // Uncheck all category checkboxes
-			});
-			autocompleteSuggestions.style.display = 'none'; // Hide suggestions
-			map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 }); // Animate to initial view
-			applyFilters(); // Re-apply filters to show all shops
-		});
-		
-		
-		map.on('popupclose', () => {
-			map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
-		});
+        // FIX: Add a click listener to the categoryList (event delegation)
+        categoryList.addEventListener('click', (event) => {
+            // Find the closest li element that was clicked
+            const clickedLi = event.target.closest('li');
+
+            if (clickedLi) {
+                // Find the checkbox within the clicked li
+                const checkbox = clickedLi.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+                    applyFilters(); // Apply filters after the checkbox state changes
+                }
+            }
+        });
+
+        clearFiltersButton.addEventListener('click', () => {
+            searchInput.value = ''; // Clear search input
+            document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false; // Uncheck all category checkboxes
+            });
+            autocompleteSuggestions.style.display = 'none'; // Hide suggestions
+            map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 }); // Animate to initial view
+            applyFilters(); // Re-apply filters to show all shops
+        });
+        
+        
+        map.on('popupclose', () => {
+            map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
+        });
 
 
-        // Initial data fetch for sql database
-        /*fetch('scripts/get-shops.php')
+        // Initial data fetch from local winkels.json
+        fetch('winkels.json')
             .then(response => response.json())
             .then(data => {
                 allShops = data; // Store all fetched shops
                 displayShops(allShops); // Display all shops initially
             })
             .catch(error => {
-                console.error('Fout bij het laden van winkeldatabase:', error);
-            });*/
-			
-			
-		// Initial data fetch from local winkels.json
-		fetch('winkels.json')
-			.then(response => response.json())
-			.then(data => {
-				allShops = data; // Store all fetched shops
-				displayShops(allShops); // Display all shops initially
-			})
-			.catch(error => {
-				console.error('Fout bij het laden van winkels.json:', error);
-		});
-	
-			
+                console.error('Fout bij het laden van winkels.json:', error);
+        });
+    
+            
     </script>
 </body>
 </html>

@@ -22,6 +22,22 @@ html, body {
     width: 100vw; /* Make the container fill the viewport width */
 }
 
+a {
+    text-decoration: none;
+}
+
+#storeList li {
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#storeList li:hover {
+    background-color: #f0f0f0;
+}
+
+
 /* Sidebar styling and animation */
 #sidebar {
     width: 500px; /* Fixed width for the sidebar */
