@@ -359,13 +359,13 @@ a {
     content: "";
     position: absolute;
     display: none;
-    left: 5px;
-    top: 1px;
+    top: 50%;
+    left: 50%;
     width: 4px;
     height: 9px;
     border: solid white;
     border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+	transform: translate(calc(-50%), calc(-50% - 1px)) rotate(45deg);
 }
 
 .custom-checkbox input:checked ~ .checkmark::after {
