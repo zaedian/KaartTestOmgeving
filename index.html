@@ -60,6 +60,23 @@
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+		// Street and satellite options
+		const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		});
+
+		const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+			attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+		});
+
+		const baseLayers = {
+			"Kaart": streetMap,
+			"Satelliet": satelliteMap
+		};
+		L.control.layers(baseLayers).addTo(map);
+		streetMap.addTo(map);
+		// End Street/satellite options
+
         const storeList = document.getElementById('storeList');
         const sidebar = document.getElementById('sidebar');
         const searchInput = document.getElementById('searchInput');
