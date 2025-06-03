@@ -26,15 +26,21 @@ a {
     text-decoration: none;
 }
 
+#storeList {
+	padding: 0 0 0 30px;
+}
+
 #storeList li {
-    padding: 10px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
     cursor: pointer;
-    width: 100%;
-    box-sizing: border-box;
+    font-size: 15px;
+	list-style: disc;
 }
 
 #storeList li:hover {
-    background-color: #f0f0f0;
+    background-color: #f1f1f1;
 }
 
 
@@ -61,25 +67,24 @@ a {
 
 /* Map container fills remaining space */
 #map {
-    font-size: 26px;
-    flex-grow: 1; /* Allows the map to take up all available space */
-    height: 100%; /* Fill the height of its flex parent */
-    position: relative; /* Change to relative or remove */
+	font-size: 26px;
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
     z-index: 1;
-    user-select: none;
 }
 
 /* --- NEW SIDEBAR STYLES --- */
 
-/* Dark area at the top of the sidebar */
 .sidebar-dark-area {
-    background-color: #333; /* Dark background color */
-    /* You can use a background image here if you have a texture like in the example */
+    background-color: #2c3e50;
+    color: white;
+	/* You can use a background image here if you have a texture like in the example */
     /* background-image: url('../images/dark-texture.png'); */
     /* background-size: cover; */
-    color: #fff; /* White text for contrast */
-    padding: 20px 15px; /* Adjust padding as needed */
-    box-sizing: border-box;
+    padding: 20px 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	padding: 20px 15px;
 }
 
 .sidebar-dark-area h1 {
@@ -209,8 +214,7 @@ a {
 }
 
 #categoryList input[type="checkbox"] {
-    margin-right: 8px; /* Space between checkbox and text */
-    /* You can style the checkbox further if desired */
+    margin-right: 8px;
 }
 
 /* Separator line */
@@ -232,7 +236,6 @@ a {
 #sidebar ul {
     list-style: none;
     margin: 0;
-    padding: 0;
 }
 
 #sidebar li {
@@ -302,4 +305,69 @@ a {
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: middle;
+}
+
+/*checkbox*/
+.custom-checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-left: 30px;
+    font-size: 15px;
+    //margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    opacity: 0;
+    z-index: 2; /* Make it clickable */
+    cursor: pointer;
+}
+
+.custom-checkbox .checkmark {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
+    z-index: 1;
+}
+
+.custom-checkbox:hover .checkmark {
+    border-color: #888;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.custom-checkbox .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+    display: block;
 }
