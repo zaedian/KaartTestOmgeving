@@ -291,6 +291,11 @@
 			map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 }); // Animate to initial view
 			applyFilters(); // Re-apply filters to show all shops
 		});
+		
+		
+		map.on('popupclose', () => {
+			map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
+		});
 
 
         // Initial data fetch for sql database
