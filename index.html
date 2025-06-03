@@ -56,12 +56,9 @@
 
     <script src="scripts/leaflet.js"></script>
     <script>
-        // Your existing JavaScript code
         const map = L.map('map', { attributionControl: false }).setView([51.9851, 5.8987], 9);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-           // attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         const storeList = document.getElementById('storeList');
         const sidebar = document.getElementById('sidebar');
@@ -69,27 +66,25 @@
         const searchButton = document.getElementById('searchButton');
         const clearFiltersButton = document.getElementById('clearFilters');
         const categoryList = document.getElementById('categoryList');
-        const autocompleteSuggestions = document.getElementById('autocomplete-suggestions'); // NEW ELEMENT
+        const autocompleteSuggestions = document.getElementById('autocomplete-suggestions');
 
-        let allShops = []; // This will store all shops fetched from the server
-        let markers = []; // This will store all Leaflet markers to easily clear them
+        let allShops = [];
+        let markers = [];
 
-        // Function to clear all existing markers from the map
         function clearMarkers() {
             markers.forEach(marker => map.removeLayer(marker));
-            markers = []; // Reset the markers array
+            markers = [];
         }
 
-        // Function to display shops on the map and in the list
         function displayShops(shopsToDisplay) {
-            clearMarkers(); // Clear existing markers before adding new ones
-            storeList.innerHTML = ''; // Clear existing list items
+            clearMarkers();
+            storeList.innerHTML = '';
 
             shopsToDisplay.forEach(winkel => {
                 if (winkel.latitude && winkel.longitude) {
                     const latlng = [winkel.latitude, winkel.longitude];
                     const marker = L.marker(latlng).addTo(map);
-                    markers.push(marker); // Add the marker to our array
+                    markers.push(marker);
 
                     marker.bindPopup(`
                         <strong>${winkel.naam}</strong><br>
@@ -99,12 +94,10 @@
                         <a href="https://www.google.com/maps/place/$${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
                     `);
 
-
                     marker.on('popupopen', () => {
                         map.flyTo(latlng, 15, { duration: 3 });
                     });
 
-                    // Create list item for this store
                     const li = document.createElement('li');
                     li.textContent = winkel.naam;
                     li.title = winkel.adres;
@@ -119,62 +112,48 @@
             });
         }
 
-        // Function to apply filters based on search input and categories
         function applyFilters() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
-                                                        .map(checkbox => checkbox.value.toLowerCase());
+                                        .map(checkbox => checkbox.value.toLowerCase());
 
             let filteredShops = allShops.filter(winkel => {
                 const matchesSearch = searchTerm === '' || 
-                                            winkel.naam.toLowerCase().includes(searchTerm) ||
-                                            winkel.adres.toLowerCase().includes(searchTerm) ||
-                                            winkel.locatie.toLowerCase().includes(searchTerm) ||
-                                            winkel.postcode.toLowerCase().includes(searchTerm);
-                                
+                    winkel.naam.toLowerCase().includes(searchTerm) ||
+                    winkel.adres.toLowerCase().includes(searchTerm) ||
+                    winkel.locatie.toLowerCase().includes(searchTerm) ||
+                    winkel.postcode.toLowerCase().includes(searchTerm);
+                
                 const matchesCategory = selectedCategories.length === 0 || 
-                                            selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
+                    selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
+                
                 return matchesSearch && matchesCategory;
             });
 
             displayShops(filteredShops);
         }
 
-        // --- AUTOCOMPLETE FUNCTIONS ---
+        // AUTOCOMPLETE FUNCTIONS
 
-        // Function to generate and display suggestions
         function generateSuggestions() {
             const query = searchInput.value.toLowerCase().trim();
-            autocompleteSuggestions.innerHTML = ''; // Clear previous suggestions
-            autocompleteSuggestions.style.display = 'none'; // Hide by default
+            autocompleteSuggestions.innerHTML = '';
+            autocompleteSuggestions.style.display = 'none';
 
-            if (query.length < 2) { // Only show suggestions if at least 2 characters are typed
-                return;
-            }
+            if (query.length < 2) return;
 
-            const uniqueSuggestions = new Map(); // Using a Map to store unique suggestions with their first associated latlng
+            const uniqueSuggestions = new Map();
 
             allShops.forEach(winkel => {
-                // Prioritize 'locatie', then 'postcode', then 'adres' for suggestions
-                const searchableFields = [
-                    winkel.locatie, 
-                    winkel.postcode, 
-                    winkel.adres,
-                    winkel.naam
-                ];
+                const searchableFields = [winkel.locatie, winkel.postcode, winkel.adres, winkel.naam];
 
                 for (const field of searchableFields) {
                     if (field && field.toLowerCase().includes(query)) {
                         let suggestionText = field;
                         let latlng = [winkel.latitude, winkel.longitude];
 
-                        // Optionally refine suggestion text (e.g., "Nijmegen" from "Nijmegen-Centrum")
-                        // If you want broader city suggestions like "Nijmegen" even if a shop is in "Nijmegen-Oost",
-                        // you'd need to extract just the city part from 'locatie' or have a separate city list.
-                        // For now, it will suggest the full field content.
-
                         if (!uniqueSuggestions.has(suggestionText)) {
-                            uniqueSuggestions.set(suggestionText, latlng); // Store the first found latlng for this text
+                            uniqueSuggestions.set(suggestionText, latlng);
                         }
                     }
                 }
@@ -184,10 +163,10 @@
                 uniqueSuggestions.forEach((latlng, suggestionText) => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-item');
-                    suggestionItem.innerHTML = `<span class="location-icon"></span> ${suggestionText}`; // Add an icon placeholder
+                    suggestionItem.innerHTML = `<span class="location-icon"></span> ${suggestionText}`;
                     suggestionItem.dataset.lat = latlng[0];
                     suggestionItem.dataset.lng = latlng[1];
-                    suggestionItem.dataset.suggestionText = suggestionText; // Store full text for input
+                    suggestionItem.dataset.suggestionText = suggestionText;
 
                     suggestionItem.addEventListener('click', (event) => {
                         const targetItem = event.currentTarget;
@@ -195,83 +174,68 @@
                         const lng = parseFloat(targetItem.dataset.lng);
                         const text = targetItem.dataset.suggestionText;
 
-                        searchInput.value = text; // Fill search input with selected text
-                        map.flyTo([lat, lng], 14, { duration: 1.5 }); // Fly to the location (adjust zoom)
+                        searchInput.value = text;
+                        map.flyTo([lat, lng], 14, { duration: 1.5 });
                         
-                        autocompleteSuggestions.style.display = 'none'; // Hide suggestions
-                        applyFilters(); // Apply filters based on the new search input value
+                        autocompleteSuggestions.style.display = 'none';
+                        applyFilters();
                     });
                     autocompleteSuggestions.appendChild(suggestionItem);
                 });
-                autocompleteSuggestions.style.display = 'block'; // Show the suggestions div
-            } else {
-                autocompleteSuggestions.style.display = 'none';
+                autocompleteSuggestions.style.display = 'block';
             }
         }
 
-        // Hide suggestions when clicking outside the search input and suggestions
         document.addEventListener('click', (event) => {
             if (!searchInput.contains(event.target) && !autocompleteSuggestions.contains(event.target)) {
                 autocompleteSuggestions.style.display = 'none';
             }
         });
-        
-        
-        /*Start geo search*/
-        
+
         async function geocodeSearch(query) {
-        if (!query) return;
+            if (!query) return;
 
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-            if (data && data.length > 0) {
-                const place = data[0];
-                const lat = parseFloat(place.lat);
-                const lon = parseFloat(place.lon);
+                if (data && data.length > 0) {
+                    const place = data[0];
+                    const lat = parseFloat(place.lat);
+                    const lon = parseFloat(place.lon);
 
-                // Fly the map to the location
-                map.flyTo([lat, lon], 14, { duration: 1.5 });
+                    map.flyTo([lat, lon], 14, { duration: 1.5 });
 
-                // OPTIONAL: Show a temporary marker for searched location
-                const tempMarker = L.marker([lat, lon]).addTo(map);
-                tempMarker.bindPopup(`<strong>${place.display_name}</strong>`).openPopup();
+                    const tempMarker = L.marker([lat, lon]).addTo(map);
+                    tempMarker.bindPopup(`<strong>${place.display_name}</strong>`).openPopup();
 
-                setTimeout(() => {
-                    map.removeLayer(tempMarker);
-                }, 5000);
+                    setTimeout(() => {
+                        map.removeLayer(tempMarker);
+                    }, 5000);
 
-                autocompleteSuggestions.style.display = 'none';
-                applyFilters(); // keep showing filtered shops
-            } else {
-                alert('Locatie niet gevonden, probeer het opnieuw.');
+                    autocompleteSuggestions.style.display = 'none';
+                    applyFilters();
+                } else {
+                    alert('Locatie niet gevonden, probeer het opnieuw.');
+                }
+            } catch (error) {
+                console.error('Geocode fout:', error);
             }
-        } catch (error) {
-            console.error('Geocode fout:', error);
         }
-    }
 
-
-    /*End geo search*/
-
-
-        // Event Listeners for filtering
-        //searchButton.addEventListener('click', applyFilters);
         searchButton.addEventListener('click', () => {
             const query = searchInput.value.trim();
             if (query.length === 0) {
-                applyFilters(); // No input, just apply filters
+                applyFilters();
             } else {
                 geocodeSearch(query);
             }
         });
-        
-        // Listen for input changes to generate suggestions
-        searchInput.addEventListener('input', generateSuggestions); // Call function as user types
-        searchInput.addEventListener('keyup', (event) => { 
+
+        searchInput.addEventListener('input', generateSuggestions);
+        searchInput.addEventListener('keyup', (event) => {
             if (event.key === 'Enter') {
                 const query = searchInput.value.trim();
                 if (query.length === 0) {
@@ -282,52 +246,64 @@
             }
         });
 
-        // FIX: Remove the old change listener from categoryList
-        categoryList.removeEventListener('change', applyFilters); 
+        // Here’s the fix for toggling the checkbox by clicking the entire li **and** applying filters on checkbox change:
 
-        // FIX: Add a click listener to the categoryList (event delegation)
-        categoryList.addEventListener('click', (event) => {
-            // Find the closest li element that was clicked
-            const clickedLi = event.target.closest('li');
+        // 1) Add click listener on each <li> that toggles the checkbox inside it
+        document.querySelectorAll('#categoryList li').forEach(li => {
+            li.addEventListener('click', (event) => {
+                // Prevent toggling twice if the click is directly on the checkbox itself
+                if (event.target.tagName.toLowerCase() === 'input') return;
 
-            if (clickedLi) {
-                // Find the checkbox within the clicked li
-                const checkbox = clickedLi.querySelector('input[type="checkbox"]');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked; // Toggle the checkbox state
-                    applyFilters(); // Apply filters after the checkbox state changes
-                }
-            }
+                const checkbox = li.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+
+                // Apply filters right after toggle
+                applyFilters();
+            });
+        });
+
+        // 2) Also listen to checkbox changes directly (handles keyboard toggling, etc.)
+        document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', applyFilters);
         });
 
         clearFiltersButton.addEventListener('click', () => {
-            searchInput.value = ''; // Clear search input
+            searchInput.value = '';
             document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false; // Uncheck all category checkboxes
+                checkbox.checked = false;
             });
-            autocompleteSuggestions.style.display = 'none'; // Hide suggestions
-            map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 }); // Animate to initial view
-            applyFilters(); // Re-apply filters to show all shops
+            autocompleteSuggestions.style.display = 'none';
+            map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
+            applyFilters();
         });
-        
-        
+
         map.on('popupclose', () => {
             map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
         });
 
-
-        // Initial data fetch from local winkels.json
-        fetch('winkels.json')
+		// Data fetch for sql database
+        /*fetch('scripts/get-shops.php')
             .then(response => response.json())
             .then(data => {
                 allShops = data; // Store all fetched shops
                 displayShops(allShops); // Display all shops initially
             })
             .catch(error => {
+                console.error('Fout bij het laden van winkeldatabase:', error);
+            });*/
+
+
+		// Data fetch for local json
+        fetch('winkels.json')
+            .then(response => response.json())
+            .then(data => {
+                allShops = data;
+                displayShops(allShops);
+            })
+            .catch(error => {
                 console.error('Fout bij het laden van winkels.json:', error);
-        });
-    
-            
+            });
+
     </script>
 </body>
 </html>

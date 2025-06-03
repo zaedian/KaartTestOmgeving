@@ -1,0 +1,105 @@
+Got it — since you're using **WordPress** with **phpMyAdmin**, that means you're working in a **PHP + MySQL** environment. You can definitely store your store locations in the database, then retrieve them with PHP and feed them into your HTML/JavaScript map.
+
+### ✅ Here's how you can do it:
+
+---
+
+## 🧩 1. **Database Table Setup**
+
+In **phpMyAdmin**, create a table (e.g. `store_locations`) with fields like:
+
+```sql
+CREATE TABLE store_locations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  latitude DECIMAL(10, 8),
+  longitude DECIMAL(11, 8)
+);
+```
+
+Insert a few sample rows:
+
+```sql
+INSERT INTO store_locations (name, latitude, longitude) VALUES
+('Store1', 51.9871, 5.9000),
+('Store2', 51.9840, 5.8950);
+```
+
+---
+
+## 🧑‍💻 2. **Create PHP File to Fetch Data**
+
+Inside your WordPress theme or child theme folder, create a file like `get-stores.php`:
+
+```php
+<?php
+header('Content-Type: application/json');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php'); // load WordPress
+
+global $wpdb;
+$results = $wpdb->get_results("SELECT name, latitude, longitude FROM store_locations", ARRAY_A);
+echo json_encode($results);
+?>
+```
+
+* This fetches all stores from the `store_locations` table and returns JSON.
+* Make sure this file is publicly accessible, e.g. at: `https://yourdomain.com/wp-content/themes/your-theme/get-stores.php`
+
+---
+
+## 🌍 3. **Update Your `index.html` with JavaScript to Load the Map**
+
+Here’s how you can modify your existing HTML page:
+
+```html
+<body>
+  <ul id="store-list"></ul>
+  <div id="map"></div>
+
+  <script src="scripts/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([51.9851, 5.8987], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    fetch('wp-content/themes/your-theme/get-stores.php')
+      .then(response => response.json())
+      .then(stores => {
+        const storeList = document.getElementById('store-list');
+
+        stores.forEach(store => {
+          const marker = L.marker([store.latitude, store.longitude])
+            .addTo(map)
+            .bindPopup(store.name);
+
+          const li = document.createElement('li');
+          li.textContent = store.name;
+          li.style.cursor = 'pointer';
+          li.onclick = () => {
+            map.setView([store.latitude, store.longitude], 16);
+            marker.openPopup();
+          };
+
+          storeList.appendChild(li);
+        });
+      });
+  </script>
+</body>
+```
+
+---
+
+### ✅ End Result:
+
+* Data comes from your WordPress/MySQL database.
+* Your map shows store markers.
+* Clicking a store name zooms to the store on the map.
+
+---
+
+Let me know if you want to:
+
+* Use a shortcode to embed this in a WordPress post/page,
+* Filter the results by category or region,
+* Or secure the PHP endpoint.
