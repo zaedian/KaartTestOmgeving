@@ -282,14 +282,16 @@
 
         categoryList.addEventListener('change', applyFilters); // When a checkbox is changed
 
-        clearFiltersButton.addEventListener('click', () => {
-            searchInput.value = ''; // Clear search input
-            document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false; // Uncheck all category checkboxes
-            });
-            autocompleteSuggestions.style.display = 'none'; // Hide suggestions
-            applyFilters(); // Re-apply filters to show all shops
-        });
+		clearFiltersButton.addEventListener('click', () => {
+			searchInput.value = ''; // Clear search input
+			document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(checkbox => {
+				checkbox.checked = false; // Uncheck all category checkboxes
+			});
+			autocompleteSuggestions.style.display = 'none'; // Hide suggestions
+			map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 }); // Animate to initial view
+			applyFilters(); // Re-apply filters to show all shops
+		});
+
 
         // Initial data fetch for sql database
         /*fetch('scripts/get-shops.php')
