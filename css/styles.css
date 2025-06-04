@@ -423,6 +423,22 @@ a {
     }
 
     /* --- Leaflet Popup Mobile Styles --- */
+	
+	  .leaflet-popup {
+        pointer-events: none; /* Prevents clicks and drags on the popup background */
+    }
+	
+	/* Re-enable pointer events for specific interactive elements within the popup */
+    .leaflet-popup-close-button, /* Make the close button clickable */
+    .leaflet-popup-content a {    /* Make your links clickable */
+        pointer-events: auto; /* Re-enable standard interaction */
+    }
+
+    /* You might also want to ensure the close button is on top if it has z-index issues */
+    .leaflet-popup-close-button {
+        z-index: 1000; /* Ensure it's above other elements */
+    }
+	
     .leaflet-popup-content-wrapper {
         max-width: 85vw; /* Sets max width to 85% of viewport width */
         width: auto; /* Allows the popup to be smaller if content is narrow */
