@@ -472,4 +472,12 @@ a {
 	#searchInput {
 		font-size: 12px;
 	}
+	
+	#search-container {
+		margin-bottom: 10px
+	}
+	
+	#searchButton {
+		display: none;
+	}
 }
