@@ -69,14 +69,14 @@
 						</li>
 						<li>
 							<label class="custom-checkbox">
-								<input type="checkbox" value="zelfpluk">
+								<input type="checkbox" value="zelfpluk pluktuin">
 								<span class="checkmark"></span>
 								Zelfpluk / Pluktuin
 							</label>
 						</li>
 						<li>
 							<label class="custom-checkbox">
-								<input type="checkbox" value="pakketten">
+								<input type="checkbox" value="groentepakketten">
 								<span class="checkmark"></span>
 								Groentepakketten verkoop
 							</label>
@@ -186,36 +186,38 @@
             });
         }
 
-		function applyFilters() {
-			const searchTerm = searchInput.value.toLowerCase().trim();
+			function applyFilters() {
+						const searchTerm = searchInput.value.toLowerCase().trim();
 
-			// Gather selected categories, and split any multi-value checkboxes
-			const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
-				.flatMap(checkbox => checkbox.value.toLowerCase().split(/\s+/));
+						// Gather selected categories, and split any multi-value checkboxes
+						const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
+							.flatMap(checkbox => checkbox.value.toLowerCase().split(/\s+/));
 
-			let filteredShops = allShops.filter(winkel => {
-				const matchesSearch = searchTerm === '' ||
-					winkel.naam.toLowerCase().includes(searchTerm) ||
-					winkel.adres.toLowerCase().includes(searchTerm) ||
-					winkel.locatie.toLowerCase().includes(searchTerm) ||
-					winkel.postcode.toLowerCase().includes(searchTerm);
+						let filteredShops = allShops.filter(winkel => {
+							const matchesSearch = searchTerm === '' ||
+								winkel.naam.toLowerCase().includes(searchTerm) ||
+								winkel.adres.toLowerCase().includes(searchTerm) ||
+								winkel.locatie.toLowerCase().includes(searchTerm) ||
+								winkel.postcode.toLowerCase().includes(searchTerm);
 
-				const matchesCategory = selectedCategories.length === 0 || (() => {
-					if (!winkel.producten) return false;
+							const matchesCategory = selectedCategories.length === 0 || (() => {
+								if (!winkel.producten) return false;
 
-					const productTags = winkel.producten
-						.toLowerCase()
-						.split(/[,|\/]/) // supports "kaas, zuivel", "kaas/zuivel"
-						.map(s => s.trim());
+								// Split by comma, slash, or space to get individual product keywords
+								const productTags = winkel.producten
+									.toLowerCase()
+									.split(/[,\/\s]+/) // Added \s+ to split by spaces as well
+									.map(s => s.trim())
+									.filter(s => s.length > 0); // Remove any empty strings resulting from multiple delimiters
 
-					return selectedCategories.some(cat => productTags.includes(cat));
-				})();
+								return selectedCategories.some(cat => productTags.includes(cat));
+							})();
 
-				return matchesSearch && matchesCategory;
-			});
+							return matchesSearch && matchesCategory;
+						});
 
-			displayShops(filteredShops);
-		}
+						displayShops(filteredShops);
+					}
 
 
 
