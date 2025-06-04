@@ -403,7 +403,7 @@ a {
         height: 100vh;
         overflow-y: auto;
         background-color: #f9f9f9;
-        border-right: 1px solid #ccc;
+        border: none;
         box-sizing: border-box;
         z-index: 1000;
         transition: width 0.3s ease-in-out;
