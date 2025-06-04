@@ -419,6 +419,7 @@
 				if (toggleButton && sidebar) {
 					toggleButton.addEventListener('click', function () {
 						sidebar.classList.toggle('open');
+						sidebar.scrollTop = 0; // Scroll the sidebar to the top
 						// Don't call invalidateSize here directly anymore
 					});
 
