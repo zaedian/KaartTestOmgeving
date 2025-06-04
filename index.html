@@ -359,6 +359,13 @@
 
         map.on('popupclose', () => {
             map.flyTo([51.9851, 5.8987], 9, { duration: 1.5 });
+			
+			//  Open the sidebar if on a mobile device when the popup closes
+			if (isMobile()) {
+				sidebar.scrollTop = 0;
+				sidebar.classList.add('open'); // Add the 'open' class to show the sidebar
+				map.invalidateSize(); // Crucial for Leaflet to redraw itself after sidebar opens
+			}
         });
 
 		// Data fetch for sql database

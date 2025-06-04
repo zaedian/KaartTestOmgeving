@@ -426,7 +426,7 @@ a {
     .leaflet-popup-content-wrapper {
         max-width: 85vw; /* Sets max width to 85% of viewport width */
         width: auto; /* Allows the popup to be smaller if content is narrow */
-        padding: 5px 8px; /* Reduced padding for a more compact look */
+        padding: 10px 16px; /* Reduced padding for a more compact look */
         font-size: 13px; /* Smaller font for general text in the popup */
     }
 
