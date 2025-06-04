@@ -324,6 +324,12 @@
                 } else {
                     geocodeSearch(query);
                 }
+				
+				//Close sidebar if mobile
+				if (isMobile()) {
+					sidebar.classList.remove('open'); // Close the sidebar
+					map.invalidateSize(); // Invalidate map size
+				}
             }
         });
 
@@ -413,7 +419,7 @@
 			});
 			
 			
-			//Mobile code
+			//Check if mobile
 			function isMobile() {
 				return window.innerWidth <= 768; // Based on your CSS media query breakpoint
 			}
