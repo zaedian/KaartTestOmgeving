@@ -3,13 +3,14 @@
 <head>
     <title>Kaart testomgeving</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/leaflet.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
     
     <div id="map-container">
+	<button id="mobile-toggle" class="mobile-toggle">☰</button>
         <div id="sidebar" class="open">
             <div class="sidebar-dark-area">
             <h2>Zoek jouw locatie</h2>
@@ -384,6 +385,29 @@
             .catch(error => {
                 console.error('Fout bij het laden van winkels.json:', error);
             });
+
+
+			// Mobile Toggle
+			document.addEventListener('DOMContentLoaded', function () {
+				const toggleButton = document.querySelector('.mobile-toggle');
+				const sidebar = document.getElementById('sidebar');
+
+				if (toggleButton && sidebar) {
+					toggleButton.addEventListener('click', function () {
+						sidebar.classList.toggle('open');
+						// Don't call invalidateSize here directly anymore
+					});
+
+					// Listen for the sidebar's CSS transition to end (width or max-width)
+					sidebar.addEventListener('transitionend', function (event) {
+						if (event.propertyName === 'width' || event.propertyName === 'max-width') {
+							map.invalidateSize();
+						}
+					});
+				}
+			});
+
+
 
     </script>
 </body>
