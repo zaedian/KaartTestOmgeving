@@ -372,8 +372,6 @@ a {
     display: block;
 }
 
-
-
 /* Mobile styles */
 .mobile-toggle {
     display: none;
@@ -389,48 +387,89 @@ a {
 }
 
 /* Show button on mobile */
+/* Add this within your @media (max-width: 768px) block */
+
 @media (max-width: 768px) {
     .mobile-toggle {
         display: block !important;
-        position: relative; /* Position it on top of the map */
-        z-index: 1100; /* Ensure it's above everything */
+        position: relative;
+        z-index: 1100;
         margin: 0;
     }
 
-     #sidebar {
-        /* Set initial width to 0 when closed to collapse it from flex flow */
-        width: 0; /* IMPORTANT: Start with width 0 for closed state */
-        flex-shrink: 0; /* Prevent shrinking when open if content is too large */
+    #sidebar {
+        width: 0;
+        flex-shrink: 0;
         height: 100vh;
         overflow-y: auto;
         background-color: #f9f9f9;
         border-right: 1px solid #ccc;
         box-sizing: border-box;
-        z-index: 1000; /* Lower than toggle */
-        /* Use width transition instead of transform for a slide effect that
-           also changes layout space. */
+        z-index: 1000;
         transition: width 0.3s ease-in-out;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.1); /* Keep shadow for effect */
+        box-shadow: 2px 0 8px rgba(0,0,0,0.1);
     }
 
     #sidebar.open {
-        width: 70vw; /* When open, give it the desired mobile width */
-        /* If you still want a transform effect for sliding, you can combine,
-           but width transition is simpler for flex flow.
-           If you use transform, you still need to change the width.
-           For a truly relative and shifting layout, changing width is key. */
+        width: 55vw;
     }
 
     #map {
-        flex-grow: 1; /* This will now always expand to fill remaining space */
-        height: 100%; /* Important for Leaflet */
-        width: auto; /* Allow flex-grow to determine width */
+        flex-grow: 1;
+        height: 100%;
+        width: auto;
         position: relative;
-        z-index: 1; /* Lower than sidebar */
+        z-index: 1;
     }
 
-    /* Optional: If the toggle button should be *inside* the sidebar when open
-       and move to the map when closed, that requires more complex JS or CSS.
-       For now, let's keep it simply positioned over the map. */
-}
+    /* --- Leaflet Popup Mobile Styles --- */
+    .leaflet-popup-content-wrapper {
+        max-width: 85vw; /* Sets max width to 85% of viewport width */
+        width: auto; /* Allows the popup to be smaller if content is narrow */
+        padding: 5px 8px; /* Reduced padding for a more compact look */
+        font-size: 13px; /* Smaller font for general text in the popup */
+    }
+
+    .leaflet-popup-content {
+        margin: 0; /* Remove default margin */
+        padding: 0; /* Content padding is largely handled by the wrapper now */
+        line-height: 1.4; /* Slightly tighter line spacing */
+    }
+
+    /* Adjust specific elements within your popup content */
+    .leaflet-popup-content strong {
+        font-size: 16px; /* A bit smaller for the name */
+        display: block; /* Ensures the name breaks to a new line */
+        margin-bottom: 3px; /* Small space after the name */
+    }
+
+    .leaflet-popup-content br {
+        content: ""; /* Needed to make line-breaks consistent if you have multiple */
+        display: block;
+        margin-bottom: 2px; /* Add slight space between lines */
+    }
+	
+	   /* Hide the specific <br> tag on mobile */
+    .leaflet-popup-content .hide-on-mobile {
+        display: none;
+    }
+
+    .leaflet-popup-content a {
+        font-size: 14px; /* Even smaller for links */
+        display: block; /* Make links stack vertically, easier to tap */
+        margin-top: 4px; /* Space between links and other text */
+        white-space: nowrap; /* Prevents links from breaking awkwardly */
+        overflow: hidden; /* Hides overflow if link is too long */
+        text-overflow: ellipsis; /* Adds "..." if link is too long */
+    }
+
+    .leaflet-popup-tip {
+        /* You can adjust the tip if it looks too large for the smaller popup */
+        width: 20px;
+        height: 10px;
+    }
+	
+	#searchInput {
+		font-size: 12px;
+	}
 }

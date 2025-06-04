@@ -40,37 +40,17 @@
 						</li>
 						<li>
 							<label class="custom-checkbox">
-								<input type="checkbox" value="zuivel">
+								<input type="checkbox" value="zuivel kaas eieren">
 								<span class="checkmark"></span>
-								Zuivel verkoop
+								Zuivel / Kaas / Eieren verkoop
 							</label>
 						</li>
+
 						<li>
 							<label class="custom-checkbox">
-								<input type="checkbox" value="eieren">
+								<input type="checkbox" value="groente fruit">
 								<span class="checkmark"></span>
-								Eieren verkoop
-							</label>
-						</li>
-						<li>
-							<label class="custom-checkbox">
-								<input type="checkbox" value="groente">
-								<span class="checkmark"></span>
-								Groente verkoop
-							</label>
-						</li>
-						<li>
-							<label class="custom-checkbox">
-								<input type="checkbox" value="fruit">
-								<span class="checkmark"></span>
-								Fruit verkoop
-							</label>
-						</li>
-						<li>
-							<label class="custom-checkbox">
-								<input type="checkbox" value="kaas">
-								<span class="checkmark"></span>
-								Kaas verkoop
+								Groente / Fruit verkoop
 							</label>
 						</li>
 						<li>
@@ -165,18 +145,24 @@
                     const marker = L.marker(latlng).addTo(map);
                     markers.push(marker);
 
-                    marker.bindPopup(`
-                        <strong>${winkel.naam}</strong><br>
-                        ${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
-                        ${winkel.producten}<br>
-                        <a href="${winkel.url}" target="_blank">> Bekijk deze winkel</a><br>
-						<a href="https://www.google.com/maps/place/${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
-                        <!-- <a href="https://www.google.com/maps/dir/?api=1&destination=${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a> -->
-                    `);
+					marker.bindPopup(`
+						<strong>${winkel.naam}</strong><span class="hide-on-mobile"><br></span>
+						${winkel.adres}, ${winkel.postcode} ${winkel.locatie}<br>
+						${winkel.producten}<br>
+						<a href="${winkel.url}" target="_blank">> Bekijk deze winkel</a><br class="hide-on-mobile"> <a href="https://www.google.com/maps/place/${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a>
+						<!-- <a href="https://www.google.com/maps/dir/?api=1&destination=${winkel.latitude},${winkel.longitude}" target="_blank">> Plan je route</a> -->
+					`);
+ 
+					marker.on('popupopen', () => {
+						map.flyTo(latlng, 15, { duration: 3 });
 
-                    marker.on('popupopen', () => {
-                        map.flyTo(latlng, 15, { duration: 3 });
-                    });
+						// Close the sidebar if on a mobile device
+						if (isMobile()) {
+							sidebar.classList.remove('open');
+							// Invalidate map size after closing sidebar to ensure it renders correctly
+							map.invalidateSize();
+						}
+					});
 
                     const li = document.createElement('li');
                     li.textContent = winkel.naam;
@@ -192,26 +178,38 @@
             });
         }
 
-        function applyFilters() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
-                                        .map(checkbox => checkbox.value.toLowerCase());
+		function applyFilters() {
+			const searchTerm = searchInput.value.toLowerCase().trim();
 
-            let filteredShops = allShops.filter(winkel => {
-                const matchesSearch = searchTerm === '' || 
-                    winkel.naam.toLowerCase().includes(searchTerm) ||
-                    winkel.adres.toLowerCase().includes(searchTerm) ||
-                    winkel.locatie.toLowerCase().includes(searchTerm) ||
-                    winkel.postcode.toLowerCase().includes(searchTerm);
-                
-                const matchesCategory = selectedCategories.length === 0 || 
-                    selectedCategories.some(cat => winkel.producten && winkel.producten.toLowerCase().includes(cat));
-                
-                return matchesSearch && matchesCategory;
-            });
+			// Gather selected categories, and split any multi-value checkboxes
+			const selectedCategories = Array.from(document.querySelectorAll('#categoryList input[type="checkbox"]:checked'))
+				.flatMap(checkbox => checkbox.value.toLowerCase().split(/\s+/));
 
-            displayShops(filteredShops);
-        }
+			let filteredShops = allShops.filter(winkel => {
+				const matchesSearch = searchTerm === '' ||
+					winkel.naam.toLowerCase().includes(searchTerm) ||
+					winkel.adres.toLowerCase().includes(searchTerm) ||
+					winkel.locatie.toLowerCase().includes(searchTerm) ||
+					winkel.postcode.toLowerCase().includes(searchTerm);
+
+				const matchesCategory = selectedCategories.length === 0 || (() => {
+					if (!winkel.producten) return false;
+
+					const productTags = winkel.producten
+						.toLowerCase()
+						.split(/[,|\/]/) // supports "kaas, zuivel", "kaas/zuivel"
+						.map(s => s.trim());
+
+					return selectedCategories.some(cat => productTags.includes(cat));
+				})();
+
+				return matchesSearch && matchesCategory;
+			});
+
+			displayShops(filteredShops);
+		}
+
+
 
         // AUTOCOMPLETE FUNCTIONS
 		
@@ -406,7 +404,12 @@
 					});
 				}
 			});
-
+			
+			
+			//Mobile code
+			function isMobile() {
+				return window.innerWidth <= 768; // Based on your CSS media query breakpoint
+			}
 
 
     </script>
