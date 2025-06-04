@@ -473,8 +473,8 @@ a {
 		font-size: 12px;
 	}
 	
-	#search-container {
-		margin-bottom: 10px
+	.search-container {
+		margin-bottom: 0px;
 	}
 	
 	#searchButton {
