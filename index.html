@@ -111,12 +111,20 @@
 			attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 		});
 
+		const labelsOverlay = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+			attribution: 'Labels &copy; Esri'
+		});
+
+		const satelliteWithLabels = L.layerGroup([satelliteMap, labelsOverlay]);
+
 		const baseLayers = {
 			"Kaart": streetMap,
-			"Satelliet": satelliteMap
+			"Satelliet": satelliteWithLabels
 		};
+
 		L.control.layers(baseLayers).addTo(map);
 		streetMap.addTo(map);
+
 		// End Street/satellite options
 
         const storeList = document.getElementById('storeList');
